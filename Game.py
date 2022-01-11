@@ -1,4 +1,5 @@
 from Generation import Chunk, GenerationSettings
+from HeightMap import HeightMap
 import Player
 
 import pygame
@@ -13,16 +14,15 @@ def main():
     entities = pygame.sprite.Group()
     player = Player.Player(Settings.WIDTH // 2, Settings.HEIGHT // 2, screen)
 
-    
-
+    heightMap = HeightMap()
+    heightMap.Generate()
     startChunk = Generation.Chunk.Chunk([2 * 64, 8 * 64], player, screen)
-    startChunk.Generate(screen)
+    startChunk.Generate(screen, heightMap)
     entities.add(startChunk.listBlocks)
     entities.add(player)
-    
-
     player.chunk = startChunk
     visibleChunks = [startChunk]
+
     timer = pygame.time.Clock()
     
 
@@ -58,25 +58,29 @@ def main():
 
         player.Update()
         playerPos = player.Position
-        chunk = player.chunk.GenerateNext(playerPos)
+        chunk = player.chunk.GenerateNext(heightMap)
+
         if chunk:
             visibleChunks.append(chunk)
             entities.add(chunk.listBlocks)
-        
+
         xOffset = Settings.HALF_WIDTH - playerPos[0]
         yOffset = Settings.HALF_HEIGHT - playerPos[1]
-
         for chunk in visibleChunks:
-            chunk.CheckPLayerInside(playerPos)
+            
+            chunk.CheckPLayerInside()
             if playerPos[0] > chunk.positionStart[0] + GenerationSettings.NEXT * 2 + Settings.VIEW_BLOCKS * GenerationSettings.SIZEBLOCK:
                 entities.remove(chunk.listBlocks)
                 visibleChunks.remove(chunk)
                 chunk.DestroyChunk()
-       
-        print(player.chunk.positionStart)
+
+            elif playerPos[0] < chunk.positionStart[0] - GenerationSettings.NEXT * 2 + Settings.VIEW_BLOCKS * GenerationSettings.SIZEBLOCK:
+                entities.remove(chunk.listBlocks)
+                visibleChunks.remove(chunk)
+                chunk.DestroyChunk()
+
         for entity in entities:
-            screen.blit(entity._Image, (entity.Position[0] + xOffset, entity.Position[1] + yOffset))
-        
+            screen.blit(entity._Image, (entity.Position[0] + xOffset, entity.Position[1] + yOffset))        
 
         timer.tick(Settings.FPS)
         pygame.display.flip()

@@ -1,14 +1,15 @@
 
 import pygame
-from pygame.time import set_timer
 import Entity
 import Physics.PhysicSettings
+import Settings
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, Xstart, Ystart, screen):
         
         pygame.sprite.Sprite.__init__(self)
         self._Entity = Entity.Entity(Xstart, Ystart, self, 64, 64, screen)
+        self.screen = screen
         self._Image = pygame.image.load('Sprites/GraySqure.png')
         self.left = False
         self.right = False
@@ -45,6 +46,8 @@ class Player(pygame.sprite.Sprite):
         if not self._Entity._Physic._onGround:
             self._Entity._Physic._yVelocity += Physics.PhysicSettings.GRAVITY
 
+        self._Entity._Physic._onGround = False
+
         self._Entity._Collider.MoveY(self._Entity._Physic._yVelocity)
 
         self._Entity._Collider.OnCollisionEnter([0, self._Entity._Physic._yVelocity], self._Entity._Physic, self.chunk.listBlocks)
@@ -56,5 +59,6 @@ class Player(pygame.sprite.Sprite):
         self._Entity._Physic._xVelocity = 0
 
     def Debug(self):
+        
         print(f"Physics: \n OnGround {self._Entity._Physic._onGround} \n velocity: {self._Entity._Physic.Velocities}")
         print(f"Position: \n {self.Position}")

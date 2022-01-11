@@ -7,8 +7,8 @@ class Collider():
         self._selfObject = object
         self._Height = height
         self._Rect = pygame.Rect(x, y, width, height)
-        self._onGround = False
         self._isTrigger = isTrigger
+        
     @property
     def Position(self):
         return (self._Rect.x, self._Rect.y)

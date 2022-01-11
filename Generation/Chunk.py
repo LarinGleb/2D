@@ -1,6 +1,6 @@
 from typing import Set
 
-from pygame.time import set_timer
+
 from . import GenerationSettings
 from . import Block
 import pygame
@@ -16,16 +16,23 @@ class Chunk():
         self.positionStart = positionStart
         self.listBlocks = []
         self.screen = screen
-        self.GeneratedNext = False
+        self.GeneratedRight = False
+        self.GeneratedLeft = False
 
-    def Generate(self, screen):
+    def Debug(self):
+        pygame.draw.line(self.screen, )
+    def CalculateHeight(self, height):
+        return int(height/10)
+
+    def Generate(self, screen, heightmap):
+        
         x, y = self.positionStart
         for i in range(1, GenerationSettings.BLOCKS_IN_CHUNK + 1):
-            block = Block.Block(x + self.player.directional * GenerationSettings.SIZEBLOCK * i, y, pygame.image.load("Sprites/Grass.jpg"), 1, screen)
+            block = Block.Block(x + GenerationSettings.SIZEBLOCK * i, self.CalculateHeight(heightmap.GetPixel(x+i)) * GenerationSettings.SIZEBLOCK, pygame.image.load("Sprites/Grass.jpg"), 1, screen)
             self.listBlocks.append(block)
 
-    def CheckPLayerInside(self, playerPos):
-        x, y = playerPos
+    def CheckPLayerInside(self):
+        x, y = self.player.Position
         if x > self.positionStart[0] and x < self.positionStart[0] + GenerationSettings.NEXT:
             self.player.chunk = self
 
@@ -34,12 +41,22 @@ class Chunk():
             i.kill()
         del self
 
-    def GenerateNext(self, playerPos):
-        if playerPos[0] > self.player.chunk.positionStart[0] + GenerationSettings.NEXT // (GenerationSettings.SIZEBLOCK * 2) and not self.GeneratedNext:
-            oldPosition = self.player.chunk.positionStart
-            self.GeneratedNext = True
-            chunk = Chunk([oldPosition[0] + GenerationSettings.NEXT, oldPosition[1]], self.player, self.screen)
-            chunk.Generate(self.screen)
-            return chunk
+    def GenerateNext(self, heightmap):
+        if self.player.directional == 1:
+            if self.player.Position[0] > self.player.chunk.positionStart[0] + GenerationSettings.NEXT // (GenerationSettings.SIZEBLOCK * 2) and not self.GeneratedRight:
+                oldPosition = self.player.chunk.positionStart
+                self.GeneratedRight = True
+                chunk = Chunk([oldPosition[0] + self.player.directional * GenerationSettings.NEXT, oldPosition[1]], self.player, self.screen)
+                chunk.Generate(self.screen, heightmap)
+                return chunk
+            else:
+                return False
         else:
-            return False
+            if self.player.Position[0] < self.player.chunk.positionStart[0] + GenerationSettings.NEXT and not self.GeneratedLeft:
+                oldPosition = self.player.chunk.positionStart
+                self.GeneratedLeft = True
+                chunk = Chunk([oldPosition[0] + self.player.directional * GenerationSettings.NEXT, oldPosition[1]], self.player, self.screen)
+                chunk.Generate(self.screen, heightmap)
+                return chunk
+            else:
+                return False
