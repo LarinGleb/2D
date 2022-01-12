@@ -6,8 +6,8 @@ class HeightMap():
         self.img = None
         self.size = 0
 
-    def Generate(self):
-        self.size = Noise.GenerateHeights.GenerateNoiseTex()
+    def Generate(self, seed = None):
+        self.size = Noise.GenerateHeights.GenerateNoiseTex(seed)
         self.img = Image.open("heightmap.png")
 
     def GetPixel(self, coord):

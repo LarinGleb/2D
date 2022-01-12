@@ -4,6 +4,8 @@ from itertools import product
 import math
 import random
 
+from datetime import datetime
+
 
 def smoothstep(t):
     """Smooth curve with a zero derivative at 0 and 1, making it useful for
@@ -25,7 +27,8 @@ class PerlinNoiseFactory(object):
     the fly as necessary.
     """
 
-    def __init__(self, dimension, octaves=1, tile=(), unbias=False):
+    def __init__(self, dimension, seed = datetime.now().microsecond, octaves=1, tile=(), unbias=False):
+        random.seed(seed)
         """Create a new Perlin noise factory in the given number of dimensions,
         which should be an integer and at least 1.
         More octaves create a foggier and more-detailed noise pattern.  More

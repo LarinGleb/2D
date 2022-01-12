@@ -62,3 +62,4 @@ class Player(pygame.sprite.Sprite):
         
         print(f"Physics: \n OnGround {self._Entity._Physic._onGround} \n velocity: {self._Entity._Physic.Velocities}")
         print(f"Position: \n {self.Position}")
+        print(f"ChunkCoords \n", self.chunk.positionStart)

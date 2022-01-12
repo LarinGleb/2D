@@ -1,5 +1,5 @@
 
-
+from Generation import GenerationSettings
 WIDTH = 1280
 HEIGHT = 640
 
@@ -13,5 +13,3 @@ FPS = 60
 CHUNK_SIZE = 16
 
 GREEN = (0, 255, 0)
-
-VIEW_BLOCKS = 8

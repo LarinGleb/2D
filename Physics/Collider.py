@@ -11,7 +11,7 @@ class Collider():
         
     @property
     def Position(self):
-        return (self._Rect.x, self._Rect.y)
+        return [self._Rect.x, self._Rect.y]
 
     def MoveCollider(self, newPostion: list):
         newX, newY = newPostion
