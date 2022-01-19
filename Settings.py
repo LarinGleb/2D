@@ -1,5 +1,5 @@
-
 from Generation import GenerationSettings
+
 WIDTH = 1280
 HEIGHT = 640
 

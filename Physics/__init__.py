@@ -1,3 +1,3 @@
 from . import Collider
-from .  import Physic
-from .  import PhysicSettings
+from . import Physic
+from . import PhysicSettings

@@ -1,7 +1,11 @@
 import pygame
 import Settings
+
+
 class Button:
-    def __init__(self, position, size, text, func, fontsize = 24, background = Settings.GREEN):
+    def __init__(
+        self, position, size, text, func, fontsize=24, background=Settings.GREEN
+    ):
         self.func = func
         self.size = size
         self.background = background

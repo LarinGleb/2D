@@ -11,7 +11,7 @@ def smoothstep(t):
     """Smooth curve with a zero derivative at 0 and 1, making it useful for
     interpolating.
     """
-    return t * t * (3. - 2. * t)
+    return t * t * (3.0 - 2.0 * t)
 
 
 def lerp(t, a, b):
@@ -27,7 +27,14 @@ class PerlinNoiseFactory(object):
     the fly as necessary.
     """
 
-    def __init__(self, dimension, seed = datetime.now().microsecond, octaves=1, tile=(), unbias=False):
+    def __init__(
+        self,
+        dimension,
+        seed=datetime.now().microsecond,
+        octaves=1,
+        tile=(),
+        unbias=False,
+    ):
         random.seed(seed)
         """Create a new Perlin noise factory in the given number of dimensions,
         which should be an integer and at least 1.
@@ -75,8 +82,9 @@ class PerlinNoiseFactory(object):
         either octaves or tiling.
         """
         if len(point) != self.dimension:
-            raise ValueError("Expected {} values, got {}".format(
-                self.dimension, len(point)))
+            raise ValueError(
+                "Expected {} values, got {}".format(self.dimension, len(point))
+            )
 
         # Build a list of the (min, max) bounds in each dimension
         grid_coords = []
