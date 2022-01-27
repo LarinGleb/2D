@@ -12,6 +12,7 @@ class Button:
         self.surface = pygame.Surface(size)
         self.rect = self.surface.get_rect(center=position)
 
+        pygame.font.init()
         self.font = pygame.font.SysFont("Times New Roman", fontsize)
         self.txt = text
         self.txtSurface = self.font.render(self.txt, 1, [0, 0, 0])

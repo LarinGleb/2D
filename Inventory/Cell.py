@@ -1,4 +1,4 @@
-from turtle import position
+
 import pygame
 import sys
 from . import Inventory
@@ -16,21 +16,31 @@ class Cell:
         self.button = Button.Button(
             position,
             (Inventory.CELL_SIZE, Inventory.CELL_SIZE),
-            "0",
+            "",
             self.ChooseBlock,
             14,
             [50, 50, 50],
         )
         self.StartState()
+        pygame.font.init()
+        self.font = pygame.font.SysFont("Times New Roman", 14)
+        self.txtSurface = self.font.render('0', 1, [255, 255, 255])
 
     def StartState(self):
         self.idIn = 0
         self.maxCount = 0
         self.countItem = 0
         self.busy = False
+        self.txt = '0'
+
+    def UpdateText(self):
+        self.txt = str(self.countItem)
+        self.txtSurface = self.font.render(self.txt, 1, [255, 255, 255])
 
     def Draw(self, screen):
+        
         self.button.draw(screen)
+
         if self.idIn > 0:
             sizePicture = Inventory.CELL_SIZE // 2
             screen.blit(
@@ -70,8 +80,7 @@ class Cell:
             2,
         )
 
-    def UpdateText(self):
-        self.button.txt = str(self.countItem)
+        screen.blit(self.txtSurface, self.position)
 
     def AddItem(self, item):
         self.countItem = 1
@@ -81,17 +90,16 @@ class Cell:
 
     def DeleteItem(self):
         self.countItem -= 1
-        if self.countItem > 0:
-            self.UpdateText()
-
-        elif self.countItem == 0:
+        self.UpdateText()
+        if self.countItem == 0:
             self.StartState()
 
     def UpdateCount(self):
-        if self.countItem + 1 <= self.maxCount:
-            self.countItem += 1
-            self.busy = self.countItem == self.maxCount
-            self.UpdateText()
+        self.countItem += 1
+        self.UpdateText()
+        print(self.countItem)
+        self.busy = self.countItem == self.maxCount
+            
 
     def ChooseBlock(self):
         self.player.chooseCell = self

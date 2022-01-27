@@ -34,26 +34,6 @@ def Path(save=False):
     PATH = fileName
 
 
-def lighting(image, sv, tf):
-
-    x, y = image.get_rect().size
-    n = int(y - y / 3 * 2)
-
-    k = 0
-    if tf:
-        k += sv
-        for i in range(n):
-            for j in range(y):
-                r, g, b = image.get_at((j, i))[:3]
-                image.set_at(
-                    (j, i), (int(r + k // 50), int(g + k // 50), int(b + k // 50))
-                )
-            if k < 1:
-                break
-            else:
-                k -= 1
-
-
 def main(
     screen,
     playerConfig=[[Settings.WIDTH // 2, Settings.HEIGHT // 2], [2, 8]],
@@ -80,15 +60,8 @@ def main(
     visibleChunks = [startChunk]
 
     timer = pygame.time.Clock()
-    tick = 0
-    sv = 0
-    toofar = True
     if True:
         while True:
-            if 0 <= tick < 300:
-                sv += 1
-            elif 300 <= tick < 600:
-                sv -= 1
             screen.fill((0, 0, 0))
             playerPos = player.Position
 
@@ -229,8 +202,6 @@ def main(
                 item = None
 
             for entity in entitiesSprites:
-                if tick % Settings.FPS:
-                    lighting(entity._Image, sv, toofar)
                 screen.blit(
                     entity._Image,
                     (entity.Position[0] + xOffset, entity.Position[1] + yOffset),
